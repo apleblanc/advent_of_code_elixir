@@ -186,7 +186,7 @@ defmodule AdventOfCode.Solution.Year2024.Day15 do
 
   # use solve/1 for interactive mode
   def part1(input) do
-    [map, steps] = input |> parse_input(input)
+    [map, steps] = input |> parse_input()
 
     map
     |> solve(steps)
@@ -198,7 +198,7 @@ defmodule AdventOfCode.Solution.Year2024.Day15 do
     [map, steps] = input |> parse_input(true)
 
     map
-    |> solve()
+    |> solve(steps)
     |> render()
     |> calc("[")
   end
