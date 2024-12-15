@@ -43,55 +43,72 @@ defmodule AdventOfCode.Solution.Year2024.Day15 do
 
   def maybe_double(chars, false), do: chars
 
+  def do_move(step, map) do
+    # render(m)
+    {bx, by} = Map.get(map, :bot)
+
+    {dx, dy} =
+      case step do
+        "^" -> {0, -1}
+        ">" -> {1, 0}
+        "v" -> {0, 1}
+        "<" -> {-1, 0}
+      end
+
+    moves = get_moves(map, {bx, by}, {dx, dy})
+
+    if is_nil(moves) do
+      # IO.puts("can't move #{step}")
+      map
+    else
+      moves =
+        moves
+        |> Enum.uniq()
+        |> Enum.sort(fn {ax, ay}, {bx, by} ->
+          case step do
+            "^" -> by >= ay
+            "v" -> ay >= by
+            ">" -> ax >= bx
+            "<" -> bx >= ax
+          end
+        end)
+
+      # IO.puts("Moving #{inspect(moves)}")
+      map = Map.put(map, :bot, {bx + dx, by + dy})
+
+      map =
+        Enum.reduce(moves, map, fn {mx, my}, nm ->
+          cur = {mx, my}
+          prev = {mx + dx, my + dy}
+          # IO.puts("moving #{inspect(cur)} to #{inspect(prev)}")
+
+          nm
+          |> Map.put(prev, Map.get(nm, cur))
+          |> Map.put(cur, ".")
+        end)
+
+      Map.put(map, {bx, by}, ".")
+    end
+  end
+
   def solve(map, steps) do
     String.codepoints(steps)
-    |> Enum.reduce(map, fn step, m ->
-      # render(m)
-      {bx, by} = Map.get(m, :bot)
+    |> Enum.reduce(map, &do_move/2)
+  end
 
-      {dx, dy} =
-        case step do
-          "^" -> {0, -1}
-          ">" -> {1, 0}
-          "v" -> {0, 1}
-          "<" -> {-1, 0}
-        end
-
-      moves = get_moves(m, {bx, by}, {dx, dy})
-
-      if is_nil(moves) do
-        # IO.puts("can't move #{step}")
-        m
+  def solve(map) do
+    render(map)
+    inp = String.trim(IO.gets("move?"))
+    if inp == "Q" do
+      map
+    else
+      map = if Enum.find(["<", ">", "^", "v"], & &1 == inp) do
+        do_move(inp, map)
       else
-        moves =
-          moves
-          |> Enum.uniq()
-          |> Enum.sort(fn {ax, ay}, {bx, by} ->
-            case step do
-              "^" -> by >= ay
-              "v" -> ay >= by
-              ">" -> ax >= bx
-              "<" -> bx >= ax
-            end
-          end)
-
-        # IO.puts("Moving #{inspect(moves)}")
-        m = Map.put(m, :bot, {bx + dx, by + dy})
-
-        m =
-          Enum.reduce(moves, m, fn {mx, my}, nm ->
-            cur = {mx, my}
-            prev = {mx + dx, my + dy}
-            # IO.puts("moving #{inspect(cur)} to #{inspect(prev)}")
-
-            nm
-            |> Map.put(prev, Map.get(nm, cur))
-            |> Map.put(cur, ".")
-          end)
-
-        Map.put(m, {bx, by}, ".")
+        map
       end
-    end)
+      solve(map)
+    end
   end
 
   def calc(map, char) do
@@ -167,6 +184,7 @@ defmodule AdventOfCode.Solution.Year2024.Day15 do
     end
   end
 
+  # use solve/1 for interactive mode
   def part1(input) do
     [map, steps] = input |> parse_input(input)
 
