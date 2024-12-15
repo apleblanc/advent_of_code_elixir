@@ -91,19 +91,30 @@ defmodule AdventOfCode.Solution.Year2024.Day15 do
     end
   end
 
-  def solve(map, steps) do
+  def solve(map, steps, do_render \\ false) do
+    max = String.length(steps)
     String.codepoints(steps)
-    |> Enum.reduce(map, &do_move/2)
+    |> Enum.with_index()
+    |> Enum.reduce(map, fn {inp, idx}, m ->
+      map = do_move(inp, m)
+      if do_render do
+        render(map, IO.ANSI.light_cyan() <> "[" <> IO.ANSI.cyan() <> "#{idx+1}" <> IO.ANSI.light_cyan() <> "/" <> IO.ANSI.cyan() <> "#{max}" <> IO.ANSI.light_cyan() <> "] " <> IO.ANSI.yellow() <> inp <>"\n")
+      else
+        map
+      end
+  end)
   end
 
   def solve(map) do
     render(map)
-    inp = String.trim(IO.gets("move?"))
+    IO.write("\n\n"<>IO.ANSI.cursor_up(1))
+
+    inp = String.trim(IO.gets("Move (W/A/S/D)? "))
     if inp == "Q" do
       map
     else
-      map = if inp != "" and "<>^v" =~ inp do
-        do_move(inp, map)
+      map = if inp != "" and "wasd" =~ inp do
+        do_move(Map.get(%{"w" => "^", "a" => "<", "s" => "v", "d" => ">"}, inp), map)
       else
         map
       end
@@ -124,17 +135,25 @@ defmodule AdventOfCode.Solution.Year2024.Day15 do
     end)
   end
 
-  def render(map) do
-    IO.puts("")
 
-    for y <- 0..(Map.get(map, :h) - 1) do
+  def render(map, header \\ "") do
+    IO.write("\x1b[?25l")
+    output = for y <- 0..(Map.get(map, :h) - 1) do
       for x <- 0..(Map.get(map, :w) - 1) do
-        Map.get(map, {x, y})
+        case Map.get(map, {x, y}) do
+          "@" -> IO.ANSI.format([:light_cyan, :bright, "@", :reset])
+          "#" -> IO.ANSI.format([:red_background, " ", :reset])
+          "." -> IO.ANSI.format([:light_black, "·", :reset])
+          "[" -> IO.ANSI.format([:green, "["])
+          "]" -> IO.ANSI.format([:green, "]", :reset])
+          char -> char
+        end
       end
       |> Enum.join()
-      |> IO.puts()
     end
-
+    |> Enum.join("\n")
+    IO.write(IO.ANSI.cursor(0, 0) <> IO.ANSI.clear_line() <> header <> output)
+    IO.write("\x1b[?25h")
     map
   end
 
@@ -190,7 +209,6 @@ defmodule AdventOfCode.Solution.Year2024.Day15 do
 
     map
     |> solve(steps)
-    |> render()
     |> calc("O")
   end
 
@@ -199,7 +217,6 @@ defmodule AdventOfCode.Solution.Year2024.Day15 do
 
     map
     |> solve(steps)
-    |> render()
     |> calc("[")
   end
 end
