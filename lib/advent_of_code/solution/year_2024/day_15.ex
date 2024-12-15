@@ -102,7 +102,7 @@ defmodule AdventOfCode.Solution.Year2024.Day15 do
     if inp == "Q" do
       map
     else
-      map = if Enum.find(["<", ">", "^", "v"], & &1 == inp) do
+      map = if inp != "" and "<>^v" =~ inp do
         do_move(inp, map)
       else
         map
@@ -198,7 +198,7 @@ defmodule AdventOfCode.Solution.Year2024.Day15 do
     [map, steps] = input |> parse_input(true)
 
     map
-    |> solve(steps)
+    |> solve()
     |> render()
     |> calc("[")
   end
