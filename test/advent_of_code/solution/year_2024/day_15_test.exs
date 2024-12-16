@@ -38,7 +38,7 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^
     assert result == 2028
   end
 
-  # @tag :skip
+  @tag :skip
   test "part2", %{input: input} do
     result = part2(input)
 

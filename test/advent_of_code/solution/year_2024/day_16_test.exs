@@ -5,22 +5,58 @@ defmodule AdventOfCode.Solution.Year2024.Day16Test do
 
   setup do
     [
-      input: """
-      """
+      input2: """
+#################
+#...#...#...#..E#
+#.#.#.#.#.#.#.#.#
+#.#.#.#...#...#.#
+#.#.#.#.###.#.#.#
+#...#.#.#.....#.#
+#.#.#.#.#.#####.#
+#.#...#.#.#.....#
+#.#.#####.#.###.#
+#.#.#.......#...#
+#.#.###.#####.###
+#.#.#...#.....#.#
+#.#.#.#####.###.#
+#.#.#.........#.#
+#.#.#.#########.#
+#S#.............#
+#################
+""",
+input: """
+###############
+#.......#....E#
+#.#.###.#.###.#
+#.....#.#...#.#
+#.###.#####.#.#
+#.#.#.......#.#
+#.#.#####.###.#
+#...........#.#
+###.#.#####.#.#
+#...#.....#.#.#
+#.#.#.###.#.#.#
+#.....#...#.#.#
+#.###.#.#.#.#.#
+#S..#.....#...#
+###############
+"""
     ]
   end
 
   @tag :skip
-  test "part1", %{input: input} do
-    result = part1(input)
-
-    assert result
+  test "part1", %{input: input, input2: input2} do
+    result1 = part1(input)
+    result2 = part1(input2)
+    assert result1 == 7036
+    assert result2 == 11048
   end
 
   @tag :skip
-  test "part2", %{input: input} do
-    result = part2(input)
-
-    assert result
+  test "part2", %{input: input, input2: input2} do
+    result1 = part2(input)
+    result2 = part2(input2)
+    assert result1 == 45
+    assert result2 == 64
   end
 end
