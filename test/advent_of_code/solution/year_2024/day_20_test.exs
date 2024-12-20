@@ -6,7 +6,22 @@ defmodule AdventOfCode.Solution.Year2024.Day20Test do
   setup do
     [
       input: """
-      """
+###############
+#...#...#.....#
+#.#.#.#.#.###.#
+#S#...#.#.#...#
+#######.#.#.###
+#######.#.#...#
+#######.#.###.#
+###..E#...#...#
+###.#######.###
+#...###...#...#
+#.#####.#.###.#
+#.#...#.#.#...#
+#.#.#.#.#.#.###
+#...#...#...###
+###############
+"""
     ]
   end
 
@@ -14,13 +29,13 @@ defmodule AdventOfCode.Solution.Year2024.Day20Test do
   test "part1", %{input: input} do
     result = part1(input)
 
-    assert result
+    assert result == nil
   end
 
-  @tag :skip
+  # @tag :skip
   test "part2", %{input: input} do
     result = part2(input)
 
-    assert result
+    assert result == nil
   end
 end

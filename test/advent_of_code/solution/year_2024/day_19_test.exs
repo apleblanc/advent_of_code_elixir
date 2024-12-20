@@ -6,7 +6,17 @@ defmodule AdventOfCode.Solution.Year2024.Day19Test do
   setup do
     [
       input: """
-      """
+r, wr, b, g, bwu, rb, gb, br
+
+brwrr
+bggr
+gbbr
+rrbgbr
+ubwu
+bwurrg
+brgr
+bbrgwb
+"""
     ]
   end
 
@@ -14,13 +24,13 @@ defmodule AdventOfCode.Solution.Year2024.Day19Test do
   test "part1", %{input: input} do
     result = part1(input)
 
-    assert result
+    assert result == 6
   end
 
   @tag :skip
   test "part2", %{input: input} do
     result = part2(input)
 
-    assert result
+    assert result == 16
   end
 end
